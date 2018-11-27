@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_news_feed"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="News Feed" />
+        <item
+            android:id="@+id/nav_staff_directory"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Staff Directory" />
+        <item
+            android:id="@+id/nav_bell_schedule"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Bell Schedule" />
+        <item
+            android:id="@+id/nav_academic_calendar"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Academic Calendar" />
+
+        <item
+            android:id="@+id/nav_lunch_menu"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Lunch Menu" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_communicate_twitter"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Twitter" />
+
+            <item
+                android:id="@+id/nav_communicate_call"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Call" />
+        </menu>
+    </item>
+
+</menu>
