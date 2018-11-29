@@ -1,11 +1,7 @@
 package org.davenportschools.westhigh;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.view.View;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -73,25 +69,24 @@ public class MainActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.nav_news_feed) {
-            setTitle("News Feed");
+            setTitle(R.string.news_feed);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, newsFeedFragment).commit();
         } else if (id == R.id.nav_staff_directory) {
-
+            setTitle(R.string.staff_directory);
         } else if (id == R.id.nav_bell_schedule) {
-
+            setTitle(R.string.bell_schedule);
         } else if (id == R.id.nav_academic_calendar) {
-
+            setTitle(R.string.academic_calendar);
         } else if (id == R.id.nav_lunch_menu) {
-
+            setTitle(R.string.lunch_menu);
         } else if (id == R.id.nav_communicate_twitter) {
-
+            // TODO - open twitter
         } else if (id == R.id.nav_communicate_call) {
-
+            // TODO - open prompt to call school (tel:)
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

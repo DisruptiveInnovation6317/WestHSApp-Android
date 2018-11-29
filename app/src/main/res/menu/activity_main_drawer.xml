@@ -6,38 +6,38 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_news_feed"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="News Feed" />
+            android:icon="@android:drawable/ic_menu_preferences"
+            android:title="@string/news_feed" />
         <item
             android:id="@+id/nav_staff_directory"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Staff Directory" />
+            android:title="@string/staff_directory" />
         <item
             android:id="@+id/nav_bell_schedule"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Bell Schedule" />
+            android:icon="@android:drawable/ic_lock_idle_alarm"
+            android:title="@string/bell_schedule" />
         <item
             android:id="@+id/nav_academic_calendar"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Academic Calendar" />
+            android:icon="@android:drawable/ic_menu_my_calendar"
+            android:title="@string/academic_calendar" />
 
         <item
             android:id="@+id/nav_lunch_menu"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Lunch Menu" />
+            android:title="@string/lunch_menu" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/communicate">
         <menu>
             <item
                 android:id="@+id/nav_communicate_twitter"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Twitter" />
+                android:title="@string/twitter" />
 
             <item
                 android:id="@+id/nav_communicate_call"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Call" />
+                android:icon="@android:drawable/stat_sys_phone_call"
+                android:title="@string/call" />
         </menu>
     </item>
 
