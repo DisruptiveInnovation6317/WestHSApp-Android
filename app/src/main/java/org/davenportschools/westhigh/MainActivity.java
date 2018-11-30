@@ -15,6 +15,10 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private NewsFeedFragment newsFeedFragment;
+    private StaffDirectoryFragment staffDirectoryFragment;
+    private BellScheduleFragment bellScheduleFragment;
+    private AcademicCalendarFragment academicCalendarFragment;
+    private LunchMenuFragment lunchMenuFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,10 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         newsFeedFragment = new NewsFeedFragment();
+        staffDirectoryFragment = new StaffDirectoryFragment();
+        bellScheduleFragment = new BellScheduleFragment();
+        academicCalendarFragment = new AcademicCalendarFragment();
+        lunchMenuFragment = new LunchMenuFragment();
     }
 
     @Override
@@ -77,12 +85,16 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, newsFeedFragment).commit();
         } else if (id == R.id.nav_staff_directory) {
             setTitle(R.string.staff_directory);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, staffDirectoryFragment).commit();
         } else if (id == R.id.nav_bell_schedule) {
             setTitle(R.string.bell_schedule);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bellScheduleFragment).commit();
         } else if (id == R.id.nav_academic_calendar) {
             setTitle(R.string.academic_calendar);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, academicCalendarFragment).commit();
         } else if (id == R.id.nav_lunch_menu) {
             setTitle(R.string.lunch_menu);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, lunchMenuFragment).commit();
         } else if (id == R.id.nav_communicate_twitter) {
             // TODO - open twitter
         } else if (id == R.id.nav_communicate_call) {
