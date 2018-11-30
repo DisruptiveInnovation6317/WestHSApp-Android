@@ -1,32 +1,35 @@
 package org.davenportschools.westhigh;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rometools.rome.feed.synd.SyndEntry;
-import com.rometools.rome.feed.synd.SyndFeed;
-import com.rometools.rome.io.FeedException;
-import com.rometools.rome.io.SyndFeedInput;
-import com.rometools.rome.io.XmlReader;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 
 public class NewsFeedFragment extends Fragment {
     public MyAdapter adapter;
-    public List<SyndEntry> articles = new LinkedList<>();
+    public List<ArticleModel> articles = new LinkedList<>();
     public boolean shouldFetchNews = true;
 
     @Nullable
@@ -37,9 +40,16 @@ public class NewsFeedFragment extends Fragment {
         adapter = new MyAdapter();
         ListView listView = view.findViewById(R.id.news_feed_listview);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String url = articles.get(position).url;
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+            }
+        });
 
         if (shouldFetchNews) {
-            new NewsFeedAsyncFetch().execute();
+            new NewsFeedAsyncFetch().execute(getContext());
         }
 
         return view;
@@ -68,30 +78,50 @@ public class NewsFeedFragment extends Fragment {
                         inflate(android.R.layout.simple_list_item_2, parent, false);
             }
 
-            SyndEntry entry = (SyndEntry)getItem(position);
+            ArticleModel entry = (ArticleModel)getItem(position);
 
             TextView titleTextView = convertView.findViewById(android.R.id.text1);
-            titleTextView.setText(entry.getTitle());
+            titleTextView.setText(entry.title);
 
             TextView subtitleTextView = convertView.findViewById(android.R.id.text2);
-            subtitleTextView.setText(entry.getDescription().getValue());
+            subtitleTextView.setLines(5);
+            subtitleTextView.setText(entry.body);
 
             return convertView;
         }
     }
 
-    private class NewsFeedAsyncFetch extends AsyncTask<Void, Void, SyndFeed> {
+    private class NewsFeedAsyncFetch extends AsyncTask<Context, Void, Void> {
         @Override
-        protected SyndFeed doInBackground(Void... voids) {
-            try {
-                String link = "https://davenportschools.org/west/feed";
-                URL url = new URL(link);
-                XmlReader reader = new XmlReader(url);
-                SyndFeedInput input = new SyndFeedInput();
-                SyndFeed feed = input.build(reader);
+        protected Void doInBackground(Context... contexts) {
+            if (contexts.length != 1) {
+                throw new IllegalArgumentException("Supply only one context to NewsFeedAsyncFetch");
+            }
 
-                return feed;
-            } catch (FeedException | IOException e) {
+            try {
+                log("Loading news");
+                Document doc = Jsoup
+                        .connect("https://www.davenportschools.org/west/")
+                        .userAgent(System.getProperty("http.agent"))
+                        .get();
+                Elements posts = doc.getElementsByClass("post");
+                for (int i = 0; i < posts.size(); i++) {
+                    Element post = posts.get(i);
+                    Element entry = post.getElementsByClass("entry").get(0);
+                    System.out.println("ENTRY " + i);
+                    System.out.println(entry.html());
+
+                    StringBuilder sb = new StringBuilder();
+                    String title = entry.select("h2").select("a").text();
+                    String link = entry.select("h2").select("a").attr("href");
+                    String body;
+                    for (Element paragraph : entry.select("p")) {
+                        sb.append(paragraph.text()).append("\n");
+                    }
+                    body = sb.toString();
+                    articles.add(new ArticleModel(title, body, link));
+                }
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
@@ -99,14 +129,17 @@ public class NewsFeedFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(SyndFeed s) {
-            if (s == null) {
-                Toast.makeText(getContext(), "Couldn't parse news, sorry. :(", Toast.LENGTH_LONG).show();;
+        protected void onPostExecute(Void s) {
+            if (articles == null || articles.size() == 0) {
+                Toast.makeText(getContext(), "Couldn't parse news, sorry. :(", Toast.LENGTH_LONG).show();
             } else {
-                articles = s.getEntries();
                 adapter.notifyDataSetChanged();
                 shouldFetchNews = false;
             }
         }
+    }
+
+    public static void log(String s) {
+        Log.d("MY_EPIC_TAG", s);
     }
 }
