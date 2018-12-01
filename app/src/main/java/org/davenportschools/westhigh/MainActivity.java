@@ -1,5 +1,7 @@
 package org.davenportschools.westhigh;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -96,9 +98,9 @@ public class MainActivity extends AppCompatActivity
             setTitle(R.string.lunch_menu);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, lunchMenuFragment).commit();
         } else if (id == R.id.nav_communicate_twitter) {
-            // TODO - open twitter
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/DavenportWest?lang=en")));
         } else if (id == R.id.nav_communicate_call) {
-            // TODO - open prompt to call school (tel:)
+            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:5637235600")));
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
