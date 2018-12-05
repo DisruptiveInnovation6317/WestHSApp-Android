@@ -1,10 +1,14 @@
 package org.davenportschools.westhigh;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -14,7 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private NewsFeedFragment newsFeedFragment;
     private StaffDirectoryFragment staffDirectoryFragment;
@@ -100,11 +104,21 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_communicate_twitter) {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/DavenportWest?lang=en")));
         } else if (id == R.id.nav_communicate_call) {
-            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:5637235600")));
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 0);
+            } else {
+                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:5637235600")));
+            }
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:5637235600")));
+        }
     }
 }
