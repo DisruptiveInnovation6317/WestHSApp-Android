@@ -4,25 +4,21 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedList;
 import java.util.Locale;
 
 public class BellScheduleFragment extends Fragment {
     private Block[] blocks = new Block[8];
     private TextView todayTextView;
 
-    private boolean isWednesday;
     private boolean isWeekend;
+    private boolean isWednesday;
 
     @Nullable
     @Override
@@ -83,11 +79,17 @@ public class BellScheduleFragment extends Fragment {
     /**
      * Change the visibility of all the text views showing block information.
      * This does not affect the TextView displaying the date, as that should always be visible.
+     * This method also hides the Falcon Flex TextView if it is Wednesday.
      * @param visible Whether the block text views should be visible.
      */
     private void setTextViewsVisible(boolean visible) {
         for (Block block : blocks) {
             block.textView.setVisibility(visible ? View.VISIBLE : View.GONE);
+        }
+
+        if (isWednesday) {
+            // Hide Falcon Flex on Wednesday
+            blocks[blocks.length-2].textView.setVisibility(View.GONE);
         }
     }
 
@@ -105,13 +107,27 @@ public class BellScheduleFragment extends Fragment {
         int year = cal.get(Calendar.YEAR);
         todayTextView.setText(String.format(Locale.US, "%s, %s %d, %d", today, month, day, year));
 
-        if (isWeekend()) {
+        if (isWeekend) { // If it's the weekend, this is all we came here for
             return;
         }
 
-        // TODO - Insert current time into correct place
-        int hour = cal.get(Calendar.HOUR_OF_DAY);
-        int minute = cal.get(Calendar.MINUTE);
+        // Insert current time into correct place
+        long millis = Calendar.getInstance().getTimeInMillis();
+        int afterIndex = -50;
+
+        for (int i = 0; i < blocks.length; i++) {
+            if (millis < blocks[i].beginMillis) {
+                afterIndex = i-1;
+            } else if (millis >= blocks[i].beginMillis && millis <= blocks[i].endMillis) {
+                afterIndex = i;
+            }
+        }
+
+        if (afterIndex == -50) {
+            afterIndex = blocks.length-1;
+        }
+
+        Log.d("DAV_WEST", "Insert current time into index: " + afterIndex);
     }
 
     private boolean isWeekend() {
@@ -125,16 +141,25 @@ public class BellScheduleFragment extends Fragment {
 }
 
 class Block {
-    int startHour, startMinute, endHour, endMinute;
+    private int startHour, startMinute, endHour, endMinute;
     String title;
     TextView textView;
+    long beginMillis, endMillis;
 
     Block(TextView textView, String title, String input) {
         this.textView = textView;
         this.title = title;
         String[] times = input.split(" - ");
         if (times.length != 2) {
-            throw new IllegalArgumentException("Wrong input. Should be X:XX - X:XX");
+            // Because the time inputs are off, we're assuming this is Falcon Flex on Wednesday.
+            // I'm setting these to Long.MAX_VALUE because the current epoch time will not
+            // be larger than this until Friday, April 11, 2262 6:47:16.854 PM GMT-05:00 DST.
+            // I hope this is a safe enough assumption. If not, hello future Computer Science
+            // students of West! This is Brandon Richards from the year 2018. I hope you're all
+            // doing great. I'm dead.
+            beginMillis = Long.MAX_VALUE;
+            endMillis = Long.MAX_VALUE;
+            return;
         }
 
         String[] time1 = times[0].split(":");
@@ -149,6 +174,17 @@ class Block {
         this.startMinute = startMinute;
         this.endHour = endHour;
         this.endMinute = endMinute;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, startHour);
+        calendar.set(Calendar.MINUTE, startMinute);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        beginMillis = calendar.getTimeInMillis();
+
+        calendar.set(Calendar.HOUR_OF_DAY, endHour);
+        calendar.set(Calendar.MINUTE, endMinute);
+        endMillis = calendar.getTimeInMillis();
     }
 
     void updateTextView() {
