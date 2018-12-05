@@ -47,6 +47,9 @@ public class MainActivity extends AppCompatActivity
         bellScheduleFragment = new BellScheduleFragment();
         academicCalendarFragment = new AcademicCalendarFragment();
         lunchMenuFragment = new LunchMenuFragment();
+
+        setTitle(R.string.bell_schedule);
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bellScheduleFragment).commit();
     }
 
     @Override

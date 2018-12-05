@@ -89,6 +89,7 @@ public class BellScheduleFragment extends Fragment {
 
         if (isWednesday) {
             // Hide Falcon Flex on Wednesday
+            // Magic blocks.length-2 is index of Falcon Flex.
             blocks[blocks.length-2].textView.setVisibility(View.GONE);
         }
     }
@@ -114,12 +115,22 @@ public class BellScheduleFragment extends Fragment {
         // Insert current time into correct place
         long millis = Calendar.getInstance().getTimeInMillis();
         int afterIndex = -50;
+        boolean passingTime = false;
 
         for (int i = 0; i < blocks.length; i++) {
             if (millis < blocks[i].beginMillis) {
+                if (i != 0) {
+                    // It's passing time, as it's before this block but not in the previous span
+                    passingTime = true;
+                }
+
                 afterIndex = i-1;
             } else if (millis >= blocks[i].beginMillis && millis <= blocks[i].endMillis) {
                 afterIndex = i;
+            }
+
+            if (afterIndex != -50) {
+                break;
             }
         }
 
@@ -127,7 +138,8 @@ public class BellScheduleFragment extends Fragment {
             afterIndex = blocks.length-1;
         }
 
-        Log.d("DAV_WEST", "Insert current time into index: " + afterIndex);
+        Log.d("DAV_WEST", "Insert current time after index: " + afterIndex);
+        Log.d("DAV_WEST", "Passing time: " + passingTime);
     }
 
     private boolean isWeekend() {
