@@ -8,21 +8,30 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class BellScheduleFragment extends Fragment {
+    private LinearLayout linearLayout;
     private Block[] blocks = new Block[8];
-    private TextView todayTextView;
+    private TextView todayTextView, currentTimeTextView;
 
     private boolean isWeekend;
     private boolean isWednesday;
+    private Timer currentTimeTimer;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bell_schedule, container, false);
 
         refresh(view);
@@ -37,6 +46,7 @@ public class BellScheduleFragment extends Fragment {
         }
 
         blocks = new Block[8];
+        linearLayout = view.findViewById(R.id.bell_schedule_linearLayout);
         todayTextView = view.findViewById(R.id.todays_date_textView);
         TextView textViews[] = {
                 view.findViewById(R.id.block_1_textView),
@@ -138,8 +148,28 @@ public class BellScheduleFragment extends Fragment {
             afterIndex = blocks.length-1;
         }
 
-        Log.d("DAV_WEST", "Insert current time after index: " + afterIndex);
-        Log.d("DAV_WEST", "Passing time: " + passingTime);
+        if (currentTimeTextView != null) {
+            linearLayout.removeViewAt(afterIndex);
+        }
+
+        ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        currentTimeTextView = new TextView(getContext());
+
+        String text = "\t";
+        if (passingTime) {
+            text += "Passing Time";
+        } else if (afterIndex == -1 || afterIndex == blocks.length - 1) {
+            text += "Freedom";
+        } else {
+            text += "Time Left: " + blocks[afterIndex].currentTimeUntilEnd();
+        }
+
+        currentTimeTextView.setText(text);
+        currentTimeTextView.setTextSize(18);
+        // afterIndex + 2 is because we have to move it past the the
+        // todayTextView and the actual block
+        linearLayout.addView(currentTimeTextView, afterIndex+2, params);
     }
 
     private boolean isWeekend() {
@@ -201,6 +231,10 @@ class Block {
 
     void updateTextView() {
         textView.setText(toString());
+    }
+
+    String currentTimeUntilEnd() {
+        return "Coming soon";
     }
 
     @NonNull
