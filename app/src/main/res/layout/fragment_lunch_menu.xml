@@ -1,7 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#161515">
 
-</LinearLayout>
+    <LinearLayout android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+        <TextView
+            android:id="@+id/todays_lunch_date_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="28dp"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:text="Today's Date" />
+
+        <TextView
+            android:id="@+id/todays_menu_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Today's Menu"
+            android:textColor="#F10A0A"
+            android:textSize="35dp" />
+
+        <TextView
+            android:id="@+id/todays_menu_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="9"
+            android:text="Todays Menu"
+            android:textColor="#F10A0A"
+            android:textSize="24dp" />
+
+        <TextView
+            android:id="@+id/tomorrows_menu_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tomorrow's Menu"
+            android:textColor="#FFFFFF"
+            android:textSize="35dp" />
+
+        <TextView
+            android:id="@+id/tomorrows_menu_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="9"
+            android:text="tomorrows Menu"
+            android:textColor="#FFFFFF"
+            android:textSize="24dp" />
+
+        <TextView
+            android:id="@+id/dontknow_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+    </LinearLayout>
+
+</ScrollView>
