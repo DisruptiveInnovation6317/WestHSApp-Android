@@ -1,5 +1,6 @@
 package org.davenportschools.westhigh;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -155,6 +156,7 @@ public class BellScheduleFragment extends Fragment {
         ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         currentTimeTextView = new TextView(getContext());
+        currentTimeTextView.setTextColor(getResources().getColor(R.color.WestRed));
 
         String text = "\t";
         if (passingTime) {
