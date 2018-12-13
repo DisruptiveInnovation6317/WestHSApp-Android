@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity
     private BellScheduleFragment bellScheduleFragment;
     private AcademicCalendarFragment academicCalendarFragment;
     private LunchMenuFragment lunchMenuFragment;
+    private TitleCardFragment titleCardFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +49,10 @@ public class MainActivity extends AppCompatActivity
         bellScheduleFragment = new BellScheduleFragment();
         academicCalendarFragment = new AcademicCalendarFragment();
         lunchMenuFragment = new LunchMenuFragment();
+        titleCardFragment = new TitleCardFragment();
 
-        setTitle(R.string.bell_schedule);
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bellScheduleFragment).commit();
+        setTitle(R.string.title_card);
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, titleCardFragment).commit();
     }
 
     @Override
@@ -88,6 +91,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
+        boolean clearTitleCard = true;
 
         if (id == R.id.nav_news_feed) {
             setTitle(R.string.news_feed);
@@ -112,7 +116,12 @@ public class MainActivity extends AppCompatActivity
             } else {
                 startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:5637235600")));
             }
+
+            clearTitleCard = false;
         }
+
+        if (clearTitleCard)
+            titleCardFragment = null;
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
