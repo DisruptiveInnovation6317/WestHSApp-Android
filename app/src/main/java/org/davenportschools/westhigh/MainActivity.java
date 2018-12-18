@@ -1,6 +1,7 @@
 package org.davenportschools.westhigh;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -13,10 +14,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ActivityCompat.OnRequestPermissionsResultCallback {
@@ -51,7 +56,7 @@ public class MainActivity extends AppCompatActivity
         lunchMenuFragment = new LunchMenuFragment();
         titleCardFragment = new TitleCardFragment();
 
-        setTitle(R.string.title_card);
+        setTitle("West High School");
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, titleCardFragment).commit();
     }
 
@@ -114,7 +119,7 @@ public class MainActivity extends AppCompatActivity
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 0);
             } else {
-                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:5637235600")));
+                callSchool();
             }
 
             clearTitleCard = false;
@@ -130,7 +135,43 @@ public class MainActivity extends AppCompatActivity
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:5637235600")));
+            callSchool();
+        }
+    }
+
+    private void callSchool(){
+        new AlertDialog.Builder(this)
+            .setTitle("Call West")
+            .setMessage("Are you sure you want to call Davenport West High School?")
+            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:5637235600")));
+                }
+            })
+            .setNegativeButton(android.R.string.no, null)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show();
+    }
+
+    public void titleCardButtonPressed(View view) {
+        Button button = (Button)view;
+        String text = button.getText().toString();
+
+        if (text.equalsIgnoreCase(getString(R.string.news_feed))) {
+            setTitle(R.string.news_feed);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, newsFeedFragment).commit();
+        } else if (text.equalsIgnoreCase(getString(R.string.staff_directory))) {
+            setTitle(R.string.staff_directory);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, staffDirectoryFragment).commit();
+        } else if (text.equalsIgnoreCase(getString(R.string.bell_schedule))) {
+            setTitle(R.string.bell_schedule);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bellScheduleFragment).commit();
+        } else if (text.equalsIgnoreCase(getString(R.string.academic_calendar))) {
+            setTitle(R.string.academic_calendar);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, academicCalendarFragment).commit();
+        } else if (text.equalsIgnoreCase(getString(R.string.lunch_menu))) {
+            setTitle(R.string.lunch_menu);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, lunchMenuFragment).commit();
         }
     }
 }
