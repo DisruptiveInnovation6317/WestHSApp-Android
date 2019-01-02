@@ -1,24 +1,17 @@
 package org.davenportschools.westhigh;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class BellScheduleFragment extends Fragment {
     private LinearLayout linearLayout;
@@ -27,7 +20,6 @@ public class BellScheduleFragment extends Fragment {
 
     private boolean isWeekend;
     private boolean isWednesday;
-    private Timer currentTimeTimer;
 
     @Nullable
     @Override
@@ -129,6 +121,10 @@ public class BellScheduleFragment extends Fragment {
         boolean passingTime = false;
 
         for (int i = 0; i < blocks.length; i++) {
+            if (blocks[i].beginMillis == Long.MAX_VALUE) {
+                continue;
+            }
+
             if (millis < blocks[i].beginMillis) {
                 if (i != 0) {
                     // It's passing time, as it's before this block but not in the previous span
@@ -147,6 +143,7 @@ public class BellScheduleFragment extends Fragment {
 
         if (afterIndex == -50) {
             afterIndex = blocks.length-1;
+            System.out.println("afterIndex = -50");
         }
 
         if (currentTimeTextView != null) {
@@ -164,7 +161,7 @@ public class BellScheduleFragment extends Fragment {
         } else if (afterIndex == -1 || afterIndex == blocks.length - 1) {
             text += "Freedom";
         } else {
-            text += "Time Left: " + blocks[afterIndex].currentTimeUntilEnd();
+            text += "Time Left: " + blocks[afterIndex].currentTimeUntilEnd(millis);
         }
 
         currentTimeTextView.setText(text);
@@ -235,8 +232,16 @@ class Block {
         textView.setText(toString());
     }
 
-    String currentTimeUntilEnd() {
-        return "Coming soon";
+    /**
+     * Used to get how long until the end of the block is over
+     * @param currentMillis The current time in milliseconds
+     * @return A string representation of the difference in time
+     */
+    String currentTimeUntilEnd(long currentMillis) {
+        long diff = endMillis - currentMillis;
+        long hours = diff / 1000 / 60 / 60;
+        long minutes = diff / 1000 / 60 % 60;
+        return String.format(Locale.US, "%dh%dm", hours, minutes);
     }
 
     @NonNull
