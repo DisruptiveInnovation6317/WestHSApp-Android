@@ -143,7 +143,6 @@ public class BellScheduleFragment extends Fragment {
 
         if (afterIndex == -50) {
             afterIndex = blocks.length-1;
-            System.out.println("afterIndex = -50");
         }
 
         if (currentTimeTextView != null) {
