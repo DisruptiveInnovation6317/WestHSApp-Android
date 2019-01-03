@@ -37,6 +37,7 @@ public class AcademicCalendarFragment extends Fragment {
         });
 
         webView.loadUrl("https://calendar.google.com/calendar/htmlembed?src=davenport.k12.ia.us_4gqaiqd6bugjhsim0q4snehcl8%40group.calendar.google.com&ctz=America%2FChicago");
+        Toast.makeText(getContext(), "Loading Calendar...", Toast.LENGTH_LONG).show();
 
         return view;
     }

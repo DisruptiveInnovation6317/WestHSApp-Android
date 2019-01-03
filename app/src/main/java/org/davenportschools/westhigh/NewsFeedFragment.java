@@ -49,7 +49,8 @@ public class NewsFeedFragment extends Fragment {
         });
 
         if (shouldFetchNews) {
-            new NewsFeedAsyncFetch().execute(getContext());
+            new NewsFeedAsyncFetch().execute();
+            Toast.makeText(getContext(), "Loading News...", Toast.LENGTH_LONG).show();
         }
 
         return view;
@@ -89,17 +90,20 @@ public class NewsFeedFragment extends Fragment {
 
             return convertView;
         }
+
+        @Override
+        public void notifyDataSetChanged() {
+            super.notifyDataSetChanged();
+            if (articles == null || articles.size() == 0) {
+                Toast.makeText(getContext(), "Couldn't load news, sorry. :(", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
-    private class NewsFeedAsyncFetch extends AsyncTask<Context, Void, Void> {
+    private class NewsFeedAsyncFetch extends AsyncTask<Void, Void, Void> {
         @Override
-        protected Void doInBackground(Context... contexts) {
-            if (contexts.length != 1) {
-                throw new IllegalArgumentException("Supply only one context to NewsFeedAsyncFetch");
-            }
-
+        protected Void doInBackground(Void... voids) {
             try {
-                log("Loading news");
                 Document doc = Jsoup
                         .connect("https://www.davenportschools.org/west/")
                         .userAgent(System.getProperty("http.agent"))
@@ -130,16 +134,10 @@ public class NewsFeedFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Void s) {
+            adapter.notifyDataSetChanged();
             if (articles == null || articles.size() == 0) {
-                Toast.makeText(getContext(), "Couldn't parse news, sorry. :(", Toast.LENGTH_LONG).show();
-            } else {
-                adapter.notifyDataSetChanged();
                 shouldFetchNews = false;
             }
         }
-    }
-
-    public static void log(String s) {
-        Log.d("MY_EPIC_TAG", s);
     }
 }
