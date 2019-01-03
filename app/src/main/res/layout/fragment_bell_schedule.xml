@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
+    android:padding="27dp"
     android:orientation="vertical"
     android:id="@+id/bell_schedule_linearLayout"
     android:background="@color/WestBlack">
@@ -19,7 +19,7 @@
 
     <TextView
         android:id="@+id/block_1_textView"
-        android:textSize="20sp"
+        android:textSize="27sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/WestRed"
@@ -27,7 +27,7 @@
 
     <TextView
         android:id="@+id/block_2_textView"
-        android:textSize="20sp"
+        android:textSize="27sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
@@ -35,7 +35,7 @@
 
     <TextView
         android:id="@+id/a_lunch_textView"
-        android:textSize="20sp"
+        android:textSize="27sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/WestRed"
@@ -43,7 +43,7 @@
 
     <TextView
         android:id="@+id/b_lunch_textView"
-        android:textSize="20sp"
+        android:textSize="27sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
@@ -51,7 +51,7 @@
 
     <TextView
         android:id="@+id/c_lunch_textView"
-        android:textSize="20sp"
+        android:textSize="27sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/WestRed"
@@ -59,7 +59,7 @@
 
     <TextView
         android:id="@+id/d_lunch_textView"
-        android:textSize="20sp"
+        android:textSize="27sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
@@ -67,7 +67,7 @@
 
     <TextView
         android:id="@+id/ff_textView"
-        android:textSize="20sp"
+        android:textSize="27sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/WestRed"
@@ -75,7 +75,7 @@
 
     <TextView
         android:id="@+id/block_4_textView"
-        android:textSize="20sp"
+        android:textSize="27sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
