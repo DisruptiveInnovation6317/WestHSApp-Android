@@ -2,6 +2,7 @@ package org.davenportschools.westhigh;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -114,7 +115,13 @@ public class MainActivity extends AppCompatActivity
             setTitle(R.string.lunch_menu);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, lunchMenuFragment).commit();
         } else if (id == R.id.nav_communicate_twitter) {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/DavenportWest?lang=en")));
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("twitter://user?screen_name=DavenportWest")));
+            } catch (Exception e) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/DavenportWest")));
+            }
+
+            clearTitleCard = false;
         } else if (id == R.id.nav_communicate_call) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 0);
