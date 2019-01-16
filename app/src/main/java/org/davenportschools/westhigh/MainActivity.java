@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity
 
     private NewsFeedFragment newsFeedFragment;
     public LinkedList<ArticleModel> articles = new LinkedList<>();
-    private StaffDirectoryFragment staffDirectoryFragment;
     private BellScheduleFragment bellScheduleFragment;
     private AcademicCalendarFragment academicCalendarFragment;
     private LunchMenuFragment lunchMenuFragment;
@@ -50,7 +49,6 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         newsFeedFragment = new NewsFeedFragment();
-        staffDirectoryFragment = new StaffDirectoryFragment();
         bellScheduleFragment = new BellScheduleFragment();
         academicCalendarFragment = new AcademicCalendarFragment();
         lunchMenuFragment = new LunchMenuFragment();
@@ -79,9 +77,6 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_news_feed) {
             setTitle(R.string.news_feed);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, newsFeedFragment).commit();
-        } else if (id == R.id.nav_staff_directory) {
-            setTitle(R.string.staff_directory);
-            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, staffDirectoryFragment).commit();
         } else if (id == R.id.nav_bell_schedule) {
             setTitle(R.string.bell_schedule);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bellScheduleFragment).commit();
@@ -144,9 +139,6 @@ public class MainActivity extends AppCompatActivity
         if (text.equalsIgnoreCase(getString(R.string.news_feed))) {
             setTitle(R.string.news_feed);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, newsFeedFragment).commit();
-        } else if (text.equalsIgnoreCase(getString(R.string.staff_directory))) {
-            setTitle(R.string.staff_directory);
-            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, staffDirectoryFragment).commit();
         } else if (text.equalsIgnoreCase(getString(R.string.bell_schedule))) {
             setTitle(R.string.bell_schedule);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bellScheduleFragment).commit();

@@ -1,5 +1,7 @@
 package org.davenportschools.westhigh;
 
+import android.util.Log;
+
 public class ArticleModel {
     public String title;
     public String body;
@@ -9,5 +11,8 @@ public class ArticleModel {
         this.title = title;
         this.body = body;
         this.url = url;
+        Log.d("ARTICLE", title);
+        Log.d("ARTICLE", body);
+        Log.d("ARTICLE", "----");
     }
 }

@@ -56,12 +56,4 @@
         android:onClick="titleCardButtonPressed"
         android:text="@string/news_feed" />
 
-    <Button
-        android:id="@+id/staff_directory_button"
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:layout_weight="1"
-        android:onClick="titleCardButtonPressed"
-        android:text="@string/staff_directory" />
-
 </LinearLayout>

@@ -38,8 +38,10 @@ public class NewsFeedFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String url = getArticles().get(position).url;
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                if (getArticles() != null) {
+                    String url = getArticles().get(position).url;
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                }
             }
         });
 
@@ -93,8 +95,13 @@ public class NewsFeedFragment extends Fragment {
             titleTextView.setText(entry.title);
 
             TextView subtitleTextView = convertView.findViewById(android.R.id.text2);
-            subtitleTextView.setLines(5);
-            subtitleTextView.setText(entry.body);
+
+            if (entry.body.isEmpty()) {
+                subtitleTextView.setVisibility(View.INVISIBLE);
+            } else {
+                subtitleTextView.setText(entry.body);
+                subtitleTextView.setLines(6);
+            }
 
             return convertView;
         }
